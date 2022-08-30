@@ -63,7 +63,7 @@ Query OK, 1 row affected (0.02 sec)
 Verify that PostgreSQL contains the new record:
 
 ```shell
-docker-compose -f docker-compose-jdbc.yaml exec postgres bash -c 'psql -U $POSTGRES_USER $POSTGRES_DB -c "select * from customers"'
+docker-compose -f docker-compose-sqlserver.yaml exec postgres bash -c 'psql -U $POSTGRES_USER $POSTGRES_DB -c "select * from customers"'
  last_name |  id  | first_name |         email         
 -----------+------+------------+-----------------------
 ...
