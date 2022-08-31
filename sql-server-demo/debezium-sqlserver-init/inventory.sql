@@ -47,21 +47,21 @@ INSERT INTO products_on_hand VALUES (108,2);
 INSERT INTO products_on_hand VALUES (109,5);
 EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'products_on_hand', @role_name = NULL, @supports_net_changes = 0;
 -- Create some customers ...
-CREATE TABLE customers (
+CREATE TABLE products (
   id INTEGER IDENTITY(1001,1) NOT NULL PRIMARY KEY,
-  first_name VARCHAR(255) NOT NULL,
-  last_name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL UNIQUE
+  product_name VARCHAR(255) NOT NULL,
+  product_price VARCHAR(255) NOT NULL,
+  product_vendor VARCHAR(255) NOT NULL UNIQUE
 );
-INSERT INTO customers(first_name,last_name,email)
-  VALUES ('Muhammad','Ibrahim','sally.thomas@acme.com');
-INSERT INTO customers(first_name,last_name,email)
-  VALUES ('George','Bailey','gbailey@foobar.com');
-INSERT INTO customers(first_name,last_name,email)
-  VALUES ('Edward','Walker','ed@walker.com');
-INSERT INTO customers(first_name,last_name,email)
-  VALUES ('Anne','Kretchmar','annek@noanswer.org');
-EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'customers', @role_name = NULL, @supports_net_changes = 0;
+INSERT INTO products(product_name,product_price,product_vendor)
+  VALUES ('shoes','4','sally.thomas@acme.com');
+INSERT INTO products(product_name,product_price,product_vendor)
+  VALUES ('car','5','gbailey@foobar.com');
+INSERT INTO products(product_name,product_price,product_vendor)
+  VALUES ('pen','13','ed@walker.com');
+INSERT INTO products(product_name,product_price,product_vendor)
+  VALUES ('shirt','2','annek@noanswer.org');
+EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'products', @role_name = NULL, @supports_net_changes = 0;
 -- Create some very simple orders
 CREATE TABLE orders (
   id INTEGER IDENTITY(10001,1) NOT NULL PRIMARY KEY,
