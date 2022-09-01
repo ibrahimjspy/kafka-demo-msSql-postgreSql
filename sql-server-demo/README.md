@@ -24,16 +24,14 @@ curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json"
 Verify that the PostgreSQL database has the same content:
 
 ```shell
-docker-compose -f docker-compose-jdbc.yaml exec postgres bash -c 'psql -U $POSTGRES_USER $POSTGRES_DB -c "select * from customers"'
- last_name |  id  | first_name |         email         
------------+------+------------+-----------------------
- Thomas    | 1001 | Sally      | sally.thomas@acme.com
- Bailey    | 1002 | George     | gbailey@foobar.com
- Walker    | 1003 | Edward     | ed@walker.com
- Kretchmar | 1004 | Anne       | annek@noanswer.org
+docker-compose -f docker-compose-server.yaml exec postgres bash -c 'psql -U $POSTGRES_USER $POSTGRES_DB -c "select * from products"'
+ id        | name  | weight   |    details        
+-----------+-------+----------+---------------
 (4 rows)
 ```
 
+ Note : details key is transformed from description
+ 
 # Consume messages from a Debezium topic
 ```
 docker-compose -f docker-compose-sqlserver.yaml exec kafka /kafka/bin/kafka-console-consumer.sh \
