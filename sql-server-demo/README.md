@@ -24,14 +24,14 @@ curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json"
 Verify that the PostgreSQL database has the same content:
 
 ```shell
-docker-compose -f docker-compose-server.yaml exec postgres bash -c 'psql -U $POSTGRES_USER $POSTGRES_DB -c "select * from products"'
+docker-compose -f docker-compose-sqlserver.yaml exec postgres bash -c 'psql -U $POSTGRES_USER $POSTGRES_DB -c "select * from products"'
  id        | name  | weight   |    details        
 -----------+-------+----------+---------------
 (4 rows)
 ```
 
  Note : details key is transformed from description
- 
+
 # Consume messages from a Debezium topic
 ```
 docker-compose -f docker-compose-sqlserver.yaml exec kafka /kafka/bin/kafka-console-consumer.sh \
@@ -48,3 +48,11 @@ docker-compose -f docker-compose-sqlserver.yaml exec sqlserver bash -c '/opt/mss
 
 # Shut down the cluster
 docker-compose -f docker-compose-sqlserver.yaml down
+
+# updating sql server query for test 
+```
+UPDATE products
+SET name='updated product name'
+WHERE weight='8.1';
+GO
+```

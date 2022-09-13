@@ -12,19 +12,16 @@ CREATE TABLE products (
   description VARCHAR(512),
   weight FLOAT
 );
-INSERT INTO products(name,description,weight) VALUES ('shinra','tensei',3.14);
+INSERT INTO products(name,description,weight) 
+  VALUES ('t-shirt','blue shirt with sleeves',3.14);
 INSERT INTO products(name,description,weight)
-  VALUES ('Ibi','12V car battery',8.1);
+  VALUES ('shoes','black shoes',8.1);
 INSERT INTO products(name,description,weight)
   VALUES ('12-pack drill bits','12-pack of drill bits with sizes ranging from #40 to #3',0.8);
 INSERT INTO products(name,description,weight)
   VALUES ('hammer','12oz carpenter''s hammer',0.75);
 INSERT INTO products(name,description,weight)
-  VALUES ('Messsi','14oz carpenter''s hammer',0.875);
-INSERT INTO products(name,description,weight)
-  VALUES ('hammer','16oz carpenter''s hammer',1.0);
-INSERT INTO products(name,description,weight)
-  VALUES ('rocks','box of assorted rocks',5.3);
+  VALUES ('tinpot','steel tinpot',3.875);
 INSERT INTO products(name,description,weight)
   VALUES ('jacket','water resistent black wind breaker',0.1);
 INSERT INTO products(name,description,weight)
