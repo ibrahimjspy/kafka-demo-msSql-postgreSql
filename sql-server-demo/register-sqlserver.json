@@ -1,5 +1,5 @@
 {
-    "name": "inventory-connector",
+    "name": "test-connector",
     "config": {
         "connector.class" : "io.debezium.connector.sqlserver.SqlServerConnector",
         "tasks.max" : "1",
@@ -11,17 +11,20 @@
         "database.password" : "Password!",
         "database.dbname" : "testDB",
 
-        "database.history.kafka.bootstrap.servers" : "kafka:9092",
+        "database.history.kafka.bootstrap.servers" : "kafka1:29092,kafka2:29093",
         "database.history.kafka.topic": "schema-changes.inventory",
         "database.encrypt": "false",
         
-        "transforms": "route,renameTopic",
+        "transforms": "route,renameTopic,unwrap",
         "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
         "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
         "transforms.route.replacement": "$3",
 
         "transforms.renameTopic.type":"org.apache.kafka.connect.transforms.RegexRouter",
         "transforms.renameTopic.regex":"products",
-        "transforms.renameTopic.replacement":"products"
+        "transforms.renameTopic.replacement":"registeryAmong",
+
+        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+        "transforms.unwrap.drop.tombstones": "false"
     }
 }

@@ -1,0 +1,102 @@
+version: '3'
+services:
+  kafka:
+    hostname: kafka
+    image: confluentinc/cp-enterprise-kafka:5.0.0
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      # KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://:9092"
+      # KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      # KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: localhost:9092
+      # CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+    ports:
+      - "9092:9092"
+  schema-registry:
+    image: confluentinc/cp-schema-registry:5.0.0
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:2181"
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+    depends_on:
+      - zookeeper
+      - kafka
+    ports:
+      - '8081:8081'
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.0.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: "2181"
+      # ZOOKEEPER_TICK_TIME: "2000"
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+     - 1433:1433 
+    environment:
+     - ACCEPT_EULA=Y
+     - MSSQL_PID=Standard
+     - SA_PASSWORD=Password!
+     - MSSQL_AGENT_ENABLED=true
+  postgres:
+    image: quay.io/debezium/postgres:9.6
+    ports:
+     - "5432:5432"
+    environment:
+     - POSTGRES_USER=postgresuser
+     - POSTGRES_PASSWORD=postgrespw
+     - POSTGRES_DB=inventory  
+  # connect:
+  #   image:  debezium/connect-jdbc-es:${DEBEZIUM_VERSION}
+  #   build:
+  #     context: debezium-jdbc-es
+  #     args:
+  #       DEBEZIUM_VERSION: ${DEBEZIUM_VERSION}
+  #   ports:
+  #    - 8083:8083
+  #    - 5005:5005
+  #   links:
+  #    - kafka
+  #    - sqlserver
+  #    - postgres
+  #   environment:
+  #    - BOOTSTRAP_SERVERS=kafka:9092
+  #    - GROUP_ID=1
+  #    - CONFIG_STORAGE_TOPIC=my_connect_configs
+  #    - OFFSET_STORAGE_TOPIC=my_connect_offsets
+  #    - STATUS_STORAGE_TOPIC=my_connect_statuses
+  connect:
+    hostname: connect
+    image: jcustenborder/kafka-connect-all
+    depends_on:
+    - schema-registry
+    - kafka
+    ports:
+    - '8083:8083'
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "kafka:9092"
+      CONNECT_REST_ADVERTISED_HOST_NAME: target-connect
+      CONNECT_PRODUCER_COMPRESSION_TYPE: lz4
+      CONNECT_GROUP_ID: connect
+      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_CONFIG_STORAGE_TOPIC: connect_config
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_TOPIC: connect_offset
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_TOPIC: connect_status
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_KEY_CONVERTER_SCHEMAS_ENABLE: 'false'
+      CONNECT_INTERNAL_VALUE_CONVERTER_SCHEMAS_ENABLE: 'false'
+      CONNECT_LOG4J_LOGGERS: 'org.reflections=ERROR'
+    volumes:
+      - './books.xsd:/books.xsd:ro'
+# For testing newer connector versions, unpack the connector archive into this
+# directory and uncomment the lines below
+#    volumes:
+#     - ./debezium-connector-sqlserver:/kafka/connect/debezium-connector-sqlserver
