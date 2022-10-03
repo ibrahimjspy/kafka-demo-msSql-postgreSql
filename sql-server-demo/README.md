@@ -52,7 +52,7 @@ docker-compose -f docker-compose-sqlserver.yaml down
 # updating sql server query for test 
 ```
 UPDATE products
-SET name='updated product name'
-WHERE weight='8.1';
+SET name='updated product name Arthur'
+WHERE weight='3.1';
 GO
 ```

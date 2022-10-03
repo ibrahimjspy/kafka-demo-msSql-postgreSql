@@ -15,16 +15,10 @@
         "database.history.kafka.topic": "schema-changes.inventory",
         "database.encrypt": "false",
         
-        "transforms": "route,renameTopic,unwrap",
+        "transforms": "route",
         "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
         "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
-        "transforms.route.replacement": "$3",
+        "transforms.route.replacement": "$3"
 
-        "transforms.renameTopic.type":"org.apache.kafka.connect.transforms.RegexRouter",
-        "transforms.renameTopic.regex":"products",
-        "transforms.renameTopic.replacement":"registeryAmong",
-
-        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
-        "transforms.unwrap.drop.tombstones": "false"
     }
 }

@@ -12,7 +12,7 @@ CREATE TABLE products (
   weight FLOAT
 );
 INSERT INTO products(name,description,weight)
-  VALUES ('scooter','Small 2-wheel scooter',3.14);
+  VALUES ('scooteryy','Small 2-wheels scooter',3.34);
 INSERT INTO products(name,description,weight)
   VALUES ('car battery','12V car battery',8.1);
 INSERT INTO products(name,description,weight)
