@@ -70,7 +70,7 @@ services:
   postgres:
     image: quay.io/debezium/postgres:9.6
     ports:
-     - "5432:5432"
+     - "5400:5400"
     environment:
      - POSTGRES_USER=postgresuser
      - POSTGRES_PASSWORD=postgrespw
