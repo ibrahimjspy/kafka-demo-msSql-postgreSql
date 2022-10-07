@@ -67,14 +67,14 @@ services:
       - kafka2
 #kafdrop for topic/msg visualization
 
-  postgres:
-    image: quay.io/debezium/postgres:9.6
-    ports:
-     - "5400:5400"
-    environment:
-     - POSTGRES_USER=postgresuser
-     - POSTGRES_PASSWORD=postgrespw
-     - POSTGRES_DB=inventory  
+  # postgres:
+  #   image: quay.io/debezium/postgres:9.6
+  #   ports:
+  #    - "5400:5400"
+  #   environment:
+  #    - POSTGRES_USER=postgresuser
+  #    - POSTGRES_PASSWORD=postgrespw
+  #    - POSTGRES_DB=inventory  
   connect:
     image:  debezium/connect-jdbc-es:${DEBEZIUM_VERSION}
     build:
@@ -88,7 +88,7 @@ services:
      - kafka1
      - kafka2
      - sqlserver
-     - postgres
+    #  - postgres
     environment:
      - BOOTSTRAP_SERVERS=kafka1:29092,kafka2:29093
      - GROUP_ID=1

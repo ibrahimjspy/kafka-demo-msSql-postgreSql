@@ -12,7 +12,7 @@ CREATE TABLE products (
   TBItem_ID INTEGER,
 );
 INSERT INTO products(nStyleName,nItemDescription,TBItem_ID)
-  VALUES ('scooteryy','Small 2-wheels scooter',3.34);
+  VALUES ('scooteryy','Small 2-wheels scooter',3);
 INSERT INTO products(nStyleName,nItemDescription,TBItem_ID)
   VALUES ('car battery','12V car battery',8.1);
 INSERT INTO products(nStyleName,nItemDescription,TBItem_ID)
@@ -32,6 +32,7 @@ CREATE TABLE category_master (
   seo_description VARCHAR(255) ,
   seo_title VARCHAR(255),
 );
+DELETE FROM category_master WHERE TBStyleNo_OS_Category_Master_ID=123
 INSERT INTO category_master(TBStyleNo_OS_Category_Master_ID,CategoryMasterName,Description,seo_description,seo_title)
   VALUES (123,'Child''s hammer','demo description','seo description','Seo Title');
  
@@ -47,8 +48,9 @@ CREATE TABLE category_sub (
   seo_description VARCHAR(255) ,
   seo_title VARCHAR(255),
 );
+DELETE FROM category_sub WHERE TBStyleNo_OS_Category_Sub_ID =123;
 INSERT INTO category_sub(TBStyleNo_OS_Category_Sub_ID,TBStyleNo_OS_Category_Master_ID,CategorySubName,Description,seo_description,seo_title)
-  VALUES (123,340,'Child''s hammer','demon','seo description','Seo Title');
+  VALUES (123,340,'Chilvf''s hammevr','demon lord','seoo description','Seo Title');
 EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'category_sub', @role_name = NULL, @supports_net_changes = 0;
 -- Create some very simple orders
 CREATE TABLE orders (
@@ -60,56 +62,98 @@ CREATE TABLE orders (
   FOREIGN KEY (purchaser) REFERENCES customers(id),
   FOREIGN KEY (product_id) REFERENCES products(id)
 );
-INSERT INTO orders(order_date,purchaser,quantity,product_id)
-  VALUES ('16-JAN-2016', 1001, 1, 102);
-INSERT INTO orders(order_date,purchaser,quantity,product_id)
-  VALUES ('17-JAN-2016', 1002, 2, 105);
-INSERT INTO orders(order_date,purchaser,quantity,product_id)
-  VALUES ('19-FEB-2016', 1002, 2, 106);
-INSERT INTO orders(order_date,purchaser,quantity,product_id)
-  VALUES ('21-FEB-2016', 1003, 1, 107);
-EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'orders', @role_name = NULL, @supports_net_changes = 0;
+
+     -- category sub
+
+DELETE FROM category_sub WHERE TBStyleNo_OS_Category_Sub_ID =123;
+
+INSERT INTO category_sub(TBStyleNo_OS_Category_Sub_ID,TBStyleNo_OS_Category_Master_ID,CategorySubName,Description,seo_description,seo_title)
+  VALUES (123,340,'tops','women black tops','fabric content','Women');
+
+UPDATE category_sub
+SET seo_title='Updated seo title'
+WHERE TBStyleNo_OS_Category_Sub_ID=123;
 GO
 
-CREATE TABLE TBStyleNo(
-  TBItem_ID nvarchar(8) NOT NULL,
-	nItemDescription varchar(4000) NULL,
+      --  products 
 
-);
-EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'TBStyleNo', @role_name = NULL, @supports_net_changes = 0;
+INSERT INTO products(nStyleName,nItemDescription,TBItem_ID)
+  VALUES ('long trouser','black long trouser',3);
 GO
 
-CREATE TABLE TBStyleNo_OS_Category_Master(
-	TBStyleNo_OS_Category_Master_ID bigint IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-	CategoryMasterName VARCHAR(50) NULL,
-	Description VARCHAR(4000) NULL,
-	Active bit NULL,
-	mainTopCategory smallint NOT NULL,
-	DisplayGroup VARCHAR(50) NULL,
-	DisplayOrder int NULL,
-	DisplayGroupOrder int NULL,
-	url VARCHAR(50) NULL,
-	Description50 VARCHAR(4000) NULL,
-	seo_title VARCHAR(500) NULL,
-	seo_description VARCHAR(max) NULL,
-	Description_tmpl VARCHAR(2000) NULL,
-	h1_tag VARCHAR(500) NULL
-);
-EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'TBStyleNo_OS_Category_Master', @role_name = NULL, @supports_net_changes = 0;
+UPDATE products
+SET nStyleName='Updated name'
+WHERE TBItem_ID=3;
 GO
 
-CREATE TABLE TBStyleNo_OS_Category_Sub(
-	TBStyleNo_OS_Category_Sub_ID bigint IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-	TBStyleNo_OS_Category_Master_ID bigint NULL,
-	CategorySubName VARCHAR(50) NULL,
-	Description VARCHAR(2000) NULL,
-	Active bit NULL,
-	url VARCHAR(50) NULL,
-	Description50 VARCHAR(2000) NULL,
-	seo_title VARCHAR(500) NULL,
-	seo_description VARCHAR(max) NULL,
-	Description_tmpl VARCHAR(2000) NULL,
-	h1_tag VARCHAR(500) NULL
-);
-EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'TBStyleNo_OS_Category_Sub', @role_name = NULL, @supports_net_changes = 0;
+DELETE FROM products WHERE TBItem_ID =3;
+
+      --master category
+    
+INSERT INTO category_master(TBStyleNo_OS_Category_Master_ID,CategoryMasterName,Description,seo_description,seo_title)
+  VALUES (123,'Child''s hammer','demo description','seo description','Seo Title');
+
+DELETE FROM category_master WHERE TBStyleNo_OS_Category_Master_ID=123
+
+UPDATE category_master
+SET seo_title='Updated seo description'
+WHERE TBStyleNo_OS_Category_Master_ID=123;
 GO
+
+      --|--
+
+
+
+-- INSERT INTO orders(order_date,purchaser,quantity,product_id)
+--   VALUES ('16-JAN-2016', 1001, 1, 102);
+-- INSERT INTO orders(order_date,purchaser,quantity,product_id)
+--   VALUES ('17-JAN-2016', 1002, 2, 105);
+-- INSERT INTO orders(order_date,purchaser,quantity,product_id)
+--   VALUES ('19-FEB-2016', 1002, 2, 106);
+-- INSERT INTO orders(order_date,purchaser,quantity,product_id)
+--   VALUES ('21-FEB-2016', 1003, 1, 107);
+-- EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'orders', @role_name = NULL, @supports_net_changes = 0;
+-- GO
+
+-- CREATE TABLE TBStyleNo(
+--   TBItem_ID nvarchar(8) NOT NULL,
+-- 	nItemDescription varchar(4000) NULL,
+
+-- );
+-- EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'TBStyleNo', @role_name = NULL, @supports_net_changes = 0;
+-- GO
+
+-- CREATE TABLE TBStyleNo_OS_Category_Master(
+-- 	TBStyleNo_OS_Category_Master_ID bigint IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+-- 	CategoryMasterName VARCHAR(50) NULL,
+-- 	Description VARCHAR(4000) NULL,
+-- 	Active bit NULL,
+-- 	mainTopCategory smallint NOT NULL,
+-- 	DisplayGroup VARCHAR(50) NULL,
+-- 	DisplayOrder int NULL,
+-- 	DisplayGroupOrder int NULL,
+-- 	url VARCHAR(50) NULL,
+-- 	Description50 VARCHAR(4000) NULL,
+-- 	seo_title VARCHAR(500) NULL,
+-- 	seo_description VARCHAR(max) NULL,
+-- 	Description_tmpl VARCHAR(2000) NULL,
+-- 	h1_tag VARCHAR(500) NULL
+-- );
+-- EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'TBStyleNo_OS_Category_Master', @role_name = NULL, @supports_net_changes = 0;
+-- GO
+
+-- CREATE TABLE TBStyleNo_OS_Category_Sub(
+-- 	TBStyleNo_OS_Category_Sub_ID bigint IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+-- 	TBStyleNo_OS_Category_Master_ID bigint NULL,
+-- 	CategorySubName VARCHAR(50) NULL,
+-- 	Description VARCHAR(2000) NULL,
+-- 	Active bit NULL,
+-- 	url VARCHAR(50) NULL,
+-- 	Description50 VARCHAR(2000) NULL,
+-- 	seo_title VARCHAR(500) NULL,
+-- 	seo_description VARCHAR(max) NULL,
+-- 	Description_tmpl VARCHAR(2000) NULL,
+-- 	h1_tag VARCHAR(500) NULL
+-- );
+-- EXEC sys.sp_cdc_enable_table @source_schema = 'dbo', @source_name = 'TBStyleNo_OS_Category_Sub', @role_name = NULL, @supports_net_changes = 0;
+-- GO
